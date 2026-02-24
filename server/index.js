@@ -17,7 +17,7 @@ mongoose
   .connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
-    console.log("Mongo URL:", process.env.MONGO_URL);
+    /* console.log("Mongo URL:", process.env.MONGO_URL); */
 app.get("/", (req, res) => {
   res.send("Hostel API Running");
 });
