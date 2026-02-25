@@ -1,8 +1,11 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import {  Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -17,8 +20,11 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
+      toast.success("Login successful");
+      navigate("/dashboard");
+
     } catch (error) {
-      console.log(error);
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -45,6 +51,13 @@ const Login = () => {
         >
           Login
         </button>
+        <p className="text-center mt-4">
+            Don't have an account?{" "}
+            <Link to="/register" className='text-blue-500 underline'>
+              Register
+            </Link>
+          </p>
+
       </div>
     </div>
   );
