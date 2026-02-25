@@ -10,6 +10,8 @@ const Login = () => {
         console.log(res);
     }
 
+    localStorage.setItem("user",JSON.stringify(res.data.user));
+
     return (
         <div className='h-screen flex items-center justify-center bg-gray-100'>
             <div className='p-6  shadow-lg'>
