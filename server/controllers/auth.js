@@ -9,6 +9,7 @@ dotenv.config();
 // Register User
 export const register = async (req,res) => {
     try {
+        console.log("BODY:", req.body); 
          const {name,email,password,role} = req.body;
 
          const hashed = await bcrypt.hash(password,10);
@@ -25,10 +26,11 @@ export const register = async (req,res) => {
             token
          })
     } catch (error) {
-        console.log(error);
+        console.log("REGISTER ERROR:", error);
         res.status(500).json({message:"Server Error"});
     }
 }
+
 
 
 //Login User
