@@ -1,6 +1,6 @@
 import express from "express";
-import { allowRoles, verifyToken } from "../middleware/authMiddleware";
-import { createMaintenance, getMaintenance, updateStatus } from "../controllers/maintenanceController";
+import { allowRoles, verifyToken } from "../middleware/authMiddleware.js";
+import { createMaintenance, getMaintenance, updateStatus } from "../controllers/maintenanceController.js";
 
 
 const router = express.Router();
