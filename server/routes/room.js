@@ -1,14 +1,15 @@
 import express from "express";
-import { verifyToken } from "../middleware/authMiddleware";
-import { assignRoom, createRoom, getRooms, vacateRoom } from "../controllers/roomController";
+import { verifyToken , allowRoles } from "../middleware/authMiddleware.js";
+import { assignRoom, createRoom, getAvailableRooms, getRooms, vacateRoom } from "../controllers/roomController.js";
 
 
 const router = express.Router();
 
-router.post("/",verifyToken,createRoom);
+router.post("/create", verifyToken, allowRoles("admin","staff"), createRoom);
 router.get("/",verifyToken,getRooms);
-router.post("/",verifyToken,assignRoom);
-router.post("/",verifyToken,vacateRoom);
+router.post("/assign",verifyToken,assignRoom);
+router.post("/vacate",verifyToken,vacateRoom);
+router.get("/available",getAvailableRooms);
 
 
 export default router;

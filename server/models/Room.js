@@ -9,7 +9,7 @@ const roomSchema = new mongoose.Schema({
     },
     type:{
         type:String,
-        enum : ["single","double","triple"],
+        enum : ["double","triple","quad","queen","king"],
         required:true,
     },
     capacity:{
