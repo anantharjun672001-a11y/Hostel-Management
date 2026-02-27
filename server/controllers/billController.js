@@ -70,20 +70,72 @@ export const getMyBill = async (req, res) => {
 
 //Mark As Paid
 
+import Resident from "../models/Resident.js";
+
 export const payBill = async (req, res) => {
   try {
+    const resident = await Resident.findOne({ userId: req.user.id });
+
     const bill = await Bill.findById(req.params.id);
 
     if (!bill) {
-      return res.status(404).json({ message: "Bill Not Found" });
+      return res.status(404).json({ message: "Bill not found" });
     }
+
+    // Prevent others paying
+    if (bill.resident.toString() !== resident._id.toString()) {
+      return res.status(403).json({ message: "Not your bill" });
+    }
+
+    if (bill.status === "paid") {
+      return res.status(400).json({ message: "Already paid" });
+    }
+
     bill.status = "paid";
     bill.paymentDate = new Date();
 
     await bill.save();
 
-    res.status(200).json(bill);
-  } catch (error) {
-    res.status(500).json({ message: "Error Paying Bill" });
+    res.json(bill);
+
+  } catch {
+    res.status(500).json({ message: "Payment error" });
   }
 };
+
+
+//Payment History
+
+
+export const paymentHistory = async (req,res) => {
+    try {
+        const resident = await Resident.findOne({userId:req.user.id});
+
+        const history = await Bill.find({resident:resident._id,status:"paid"}).populate("room");
+
+        res.status(200).json(history);
+    } catch (error) {
+        res.status(500).json({ message: "Error Fetching Payment History" });
+    }
+}
+
+
+//Revenue report
+
+export const revenueReport = async (req,res) => {
+    try {
+        const revenue = await Bill.aggregate([
+            { $match : { status : "paid"}},
+            {
+                $group : {
+                    _id : null,
+                    totalRevenue : {$sum : "$total"}
+                }
+            }
+        ])
+
+        res.status(200).json(revenue);
+    } catch (error) {
+        res.status(500).json({ message: "Error Fetching Revenue Report" });
+    }
+}
