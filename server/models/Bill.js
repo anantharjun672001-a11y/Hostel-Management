@@ -34,9 +34,13 @@ const billSchema = new mongoose.Schema(
     total: {
       type: Number,
     },
+    receipt: {
+      type: String,
+      unique: true,
+    },
     status: {
       type: String,
-      enum: ["paid", "unpaid"],
+      enum: ["paid", "unpaid","pending"],
       default: "unpaid",
     },
     paymentDate: {
