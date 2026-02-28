@@ -9,6 +9,7 @@ import maintenanceRoutes from "./routes/maintenance.js";
 import billRoutes from "./routes/bill.js";
 import paymentRoutes from "./routes/payment.js";
 import dashboardRoutes from "./routes/dashboard.js"
+import notificationRoutes from "./routes/notification.js"
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/maintenance",maintenanceRoutes);
 app.use("/api/bill",billRoutes);
 app.use("/api/payments",paymentRoutes)
 app.use("/api/dashboard",dashboardRoutes)
+app.use("/api/notification",notificationRoutes)
 
 
 mongoose

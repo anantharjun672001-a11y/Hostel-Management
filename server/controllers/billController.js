@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import razorpay from "../utils/razorpay.js";
 import crypto from "crypto";
 import PDFDocument from "pdfkit";
+import Notification from "../models/Notification.js";
 
 dotenv.config();
 
@@ -45,6 +46,13 @@ export const createBill = async (req, res) => {
       total,
       createdBy: req.user.id,
     });
+    if (resident.userId) {
+      await Notification.create({
+        user: resident.userId,
+        message: `New bill generated for ${month}`,
+        type: "bill",
+      });
+    }
 
     res.status(201).json(bill);
   } catch (error) {
@@ -177,6 +185,16 @@ export const verifyPayment = async (req, res) => {
 
     await bill.save();
 
+    const resident = await Resident.findById(bill.resident);
+
+    if (resident?.userId) {
+      await Notification.create({
+        user: resident.userId,
+        message: `Payment successful for ${bill.month}`,
+        type: "payment",
+      });
+    }
+
     res.status(200).json({ message: "Payment successful" });
   } catch (error) {
     console.log(error);
@@ -188,7 +206,6 @@ export const verifyPayment = async (req, res) => {
 
 //Generate Invoice
 
-
 export const generateInvoice = async (req, res) => {
   try {
     const bill = await Bill.findById(req.params.id)
@@ -199,51 +216,42 @@ export const generateInvoice = async (req, res) => {
       return res.status(404).json({ message: "Bill not found" });
     }
 
-   
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=invoice-${bill._id}.pdf`
+      `attachment; filename=invoice-${bill._id}.pdf`,
     );
 
     const doc = new PDFDocument({ margin: 50 });
 
     doc.pipe(res);
 
-   
     doc.font("Courier");
 
-    
     doc.fontSize(20).text("HOSTEL INVOICE", { align: "center" });
 
     doc.moveDown(2);
 
-    
     doc.fontSize(12);
     doc.text(`Resident Phone: ${bill.resident?.phone || "-"}`);
     doc.text(`Room Number: ${bill.room?.roomNumber || "-"}`);
     doc.text(`Month: ${bill.month}`);
     doc.text(
       `Payment Date: ${
-        bill.paymentDate
-          ? new Date(bill.paymentDate).toLocaleDateString()
-          : "-"
-      }`
+        bill.paymentDate ? new Date(bill.paymentDate).toLocaleDateString() : "-"
+      }`,
     );
 
     doc.moveDown(2);
 
-   
     doc.fontSize(14).text("Bill Details");
 
     doc.moveDown();
 
-    
     doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
 
     doc.moveDown();
 
-    
     const left = 60;
     const right = 450;
 
@@ -269,12 +277,10 @@ export const generateInvoice = async (req, res) => {
 
     doc.moveDown();
 
-    
     doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
 
     doc.moveDown();
 
-    
     doc.fontSize(14).text("Total", left);
     doc.text(`₹ ${bill.total}`, right);
 
