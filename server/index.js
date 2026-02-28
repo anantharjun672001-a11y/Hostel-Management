@@ -8,6 +8,7 @@ import roomRoutes from "./routes/room.js";
 import maintenanceRoutes from "./routes/maintenance.js";
 import billRoutes from "./routes/bill.js";
 import paymentRoutes from "./routes/payment.js";
+import dashboardRoutes from "./routes/dashboard.js"
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use("/api/room", roomRoutes);
 app.use("/api/maintenance",maintenanceRoutes);
 app.use("/api/bill",billRoutes);
 app.use("/api/payments",paymentRoutes)
+app.use("/api/dashboard",dashboardRoutes)
 
 
 mongoose
