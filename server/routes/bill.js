@@ -1,6 +1,6 @@
 import express from "express";
 import { allowRoles, verifyToken } from "../middleware/authMiddleware.js";
-import { createBill, createOrder, getBills, getMyBill, paymentHistory, revenueReport, verifyPayment } from "../controllers/billController.js";
+import { createBill, createOrder, generateInvoice, getBills, getMyBill, paymentHistory, revenueReport, verifyPayment } from "../controllers/billController.js";
 
 
 
@@ -21,6 +21,8 @@ router.get("/report",verifyToken,allowRoles("admin"),revenueReport);
 router.post("/order/:id",verifyToken,allowRoles("resident"),createOrder);
 
 router.post("/verify-payment", verifyPayment);
+
+router.get("/invoice/:id",verifyToken,allowRoles("resident"),generateInvoice);
 
 
 export default router;

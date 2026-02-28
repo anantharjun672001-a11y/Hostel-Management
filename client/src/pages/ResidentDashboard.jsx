@@ -23,6 +23,32 @@ const ResidentDashboard = () => {
     fetchBills();
   }, []);
 
+  const downloadInvoice = async (billId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/bill/invoice/${billId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          responseType: "blob",
+        },
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.setAttribute("download", `invoice-${billId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <h1>Welcome Resident</h1>
@@ -35,7 +61,7 @@ const ResidentDashboard = () => {
             .toLowerCase();
 
           const isPaid = ["paid", "success", "completed", "settled"].includes(
-            normalizedStatus
+            normalizedStatus,
           );
 
           return (
@@ -43,6 +69,13 @@ const ResidentDashboard = () => {
               <p>{bill.month}</p>
               <p>{bill.total}</p>
               {!isPaid && <PayButton billId={bill._id} />}
+
+              <button
+                onClick={() => downloadInvoice(bill._id)}
+                className="bg-blue-500 text-white px-3 py-1"
+              >
+                Download Invoice
+              </button>
             </div>
           );
         })

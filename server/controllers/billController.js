@@ -3,9 +3,9 @@ import Resident from "../models/Resident.js";
 import dotenv from "dotenv";
 import razorpay from "../utils/razorpay.js";
 import crypto from "crypto";
+import PDFDocument from "pdfkit";
 
 dotenv.config();
-
 
 // Create Bill
 export const createBill = async (req, res) => {
@@ -56,7 +56,6 @@ export const createBill = async (req, res) => {
   }
 };
 
-
 // Get All Bills (Admin)
 export const getBills = async (req, res) => {
   try {
@@ -66,7 +65,6 @@ export const getBills = async (req, res) => {
     res.status(500).json({ message: "Error Fetching Bills" });
   }
 };
-
 
 // Resident Bills
 export const getMyBill = async (req, res) => {
@@ -78,7 +76,6 @@ export const getMyBill = async (req, res) => {
     res.status(500).json({ message: "Error fetching your bills" });
   }
 };
-
 
 // Payment History
 export const paymentHistory = async (req, res) => {
@@ -95,7 +92,6 @@ export const paymentHistory = async (req, res) => {
     res.status(500).json({ message: "Error Fetching Payment History" });
   }
 };
-
 
 // Revenue Report
 export const revenueReport = async (req, res) => {
@@ -116,7 +112,6 @@ export const revenueReport = async (req, res) => {
   }
 };
 
-
 // Razorpay → Create Order
 export const createOrder = async (req, res) => {
   try {
@@ -134,11 +129,15 @@ export const createOrder = async (req, res) => {
       amount: bill.total * 100,
       currency: "INR",
       receipt: bill._id.toString(),
+
+      notes: {
+        billId: bill._id.toString(),
+        residentId: bill.resident.toString(),
+      },
     };
 
     const order = await razorpay.orders.create(options);
 
-   
     bill.receipt = order.id;
     await bill.save();
 
@@ -149,17 +148,12 @@ export const createOrder = async (req, res) => {
   }
 };
 
-
 // Razorpay → Verify Payment
-
 
 export const verifyPayment = async (req, res) => {
   try {
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-    } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
@@ -172,7 +166,6 @@ export const verifyPayment = async (req, res) => {
       return res.status(400).json({ message: "Payment verification failed" });
     }
 
-    // 🔥 Find bill using saved order id
     const bill = await Bill.findOne({ receipt: razorpay_order_id });
 
     if (!bill) {
@@ -190,5 +183,112 @@ export const verifyPayment = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error Verifying Payment", error: error.message });
+  }
+};
+
+//Generate Invoice
+
+
+export const generateInvoice = async (req, res) => {
+  try {
+    const bill = await Bill.findById(req.params.id)
+      .populate("resident")
+      .populate("room");
+
+    if (!bill) {
+      return res.status(404).json({ message: "Bill not found" });
+    }
+
+   
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=invoice-${bill._id}.pdf`
+    );
+
+    const doc = new PDFDocument({ margin: 50 });
+
+    doc.pipe(res);
+
+   
+    doc.font("Courier");
+
+    
+    doc.fontSize(20).text("HOSTEL INVOICE", { align: "center" });
+
+    doc.moveDown(2);
+
+    
+    doc.fontSize(12);
+    doc.text(`Resident Phone: ${bill.resident?.phone || "-"}`);
+    doc.text(`Room Number: ${bill.room?.roomNumber || "-"}`);
+    doc.text(`Month: ${bill.month}`);
+    doc.text(
+      `Payment Date: ${
+        bill.paymentDate
+          ? new Date(bill.paymentDate).toLocaleDateString()
+          : "-"
+      }`
+    );
+
+    doc.moveDown(2);
+
+   
+    doc.fontSize(14).text("Bill Details");
+
+    doc.moveDown();
+
+    
+    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+
+    doc.moveDown();
+
+    
+    const left = 60;
+    const right = 450;
+
+    doc.fontSize(12);
+
+    doc.text("Rent", left);
+    doc.text(`₹ ${bill.rent}`, right);
+
+    doc.moveDown();
+
+    doc.text("Utilities", left);
+    doc.text(`₹ ${bill.utilities}`, right);
+
+    doc.moveDown();
+
+    doc.text("Late Fee", left);
+    doc.text(`₹ ${bill.lateFee}`, right);
+
+    doc.moveDown();
+
+    doc.text("Discount", left);
+    doc.text(`₹ ${bill.discount}`, right);
+
+    doc.moveDown();
+
+    
+    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+
+    doc.moveDown();
+
+    
+    doc.fontSize(14).text("Total", left);
+    doc.text(`₹ ${bill.total}`, right);
+
+    doc.moveDown(2);
+
+    doc.fontSize(12).text("Status: PAID", { align: "right" });
+
+    doc.moveDown(3);
+
+    doc.text("Thank you for your payment!", { align: "center" });
+
+    doc.end();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Invoice generation error" });
   }
 };

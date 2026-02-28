@@ -7,10 +7,15 @@ import residentRoutes from "./routes/residentRoute.js";
 import roomRoutes from "./routes/room.js";
 import maintenanceRoutes from "./routes/maintenance.js";
 import billRoutes from "./routes/bill.js";
+import paymentRoutes from "./routes/payment.js";
 
 dotenv.config();
 
 const app = express();
+
+app.use("/api/payments/webhook",
+  express.raw({ type: "application/json" })
+);
 
 app.use(express.json());
 app.use(cors());
@@ -21,6 +26,7 @@ app.use("/api/resident", residentRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/maintenance",maintenanceRoutes);
 app.use("/api/bill",billRoutes);
+app.use("/api/payments",paymentRoutes)
 
 
 mongoose
