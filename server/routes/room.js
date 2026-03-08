@@ -12,4 +12,5 @@ router.post("/vacate",verifyToken,vacateRoom);
 router.get("/available",getAvailableRooms);
 
 
+
 export default router;

@@ -40,3 +40,29 @@ export const updateResident = async (req,res) => {
         res.status(500).json({ message: "Error Updating Resident" });
     }
 }
+
+// Get My Room (Resident)
+
+export const getMyRoom = async (req, res) => {
+  try {
+
+    const userId = req.user.id || req.user._id;
+
+    const resident = await Resident
+      .findOne({ userId })
+      .populate("room");
+
+    if (!resident) {
+      return res.status(404).json({ message: "Resident not found" });
+    }
+
+    res.status(200).json(resident);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({ message: "Error fetching room" });
+
+  }
+};

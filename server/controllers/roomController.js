@@ -10,7 +10,6 @@ dotenv.config();
 
 export const createRoom = async (req, res) => {
   try {
-
     const { roomNumber } = req.body;
 
     const existingRoom = await Room.findOne({ roomNumber });
@@ -22,7 +21,6 @@ export const createRoom = async (req, res) => {
     const room = await Room.create(req.body);
 
     res.status(201).json(room);
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error Creating Room" });
@@ -44,10 +42,14 @@ export const getRooms = async (req, res) => {
 
 export const assignRoom = async (req, res) => {
   try {
-    const { roomId, residentId } = req.body;
+
+    const { roomId } = req.body;
+
+    const userId = req.user.id || req.user._id;
 
     const room = await Room.findById(roomId);
-    const resident = await Resident.findById(residentId);
+
+    const resident = await Resident.findOne({ userId });
 
     if (!room) {
       return res.status(404).json({ message: "Room Not Found" });
@@ -65,7 +67,7 @@ export const assignRoom = async (req, res) => {
       return res.status(400).json({ message: "Room is Full" });
     }
 
-    room.residents.push(residentId);
+    room.residents.push(resident._id);
     room.occupied += 1;
 
     resident.room = roomId;
@@ -74,14 +76,19 @@ export const assignRoom = async (req, res) => {
     await resident.save();
 
     res.status(200).json({
-      message: "Room Assigned Successfully",
-      room,
+      message: "Room Assigned Successfully"
     });
+
   } catch (error) {
+
     console.log(error);
+
     res.status(500).json({ message: "Error Assigning Room" });
+
   }
 };
+
+
 
 // Vacate Room
 

@@ -24,10 +24,8 @@ const Navbar = () => {
               Create Bill
             </Link>
           )}
-
+          <Link to="/resident/my-room">My Room</Link>
           <Link to="/maintenance">Maintenance</Link>
-
-          
 
           <NotificationBell />
         </div>

@@ -12,6 +12,8 @@ import AdminCreateBill from "./pages/AdminCreateBill";
 import Rooms from "./pages/admin/Rooms";
 import CreateRoom from "./pages/admin/CreateRoom";
 import AssignRoom from "./pages/admin/AssignRoom";
+import AvailableRooms from "./pages/resident/AvailableRooms";
+import MyRoom from "./pages/resident/MyRoom";
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
             <Route path="/admin/rooms" element={<Rooms/>}/>
             <Route path="/admin/rooms/create" element={<CreateRoom/>}/>
             <Route path="/admin/rooms/assign" element={<AssignRoom />} />
+            <Route path="/resident/rooms" element={<AvailableRooms/>} />
+            <Route path="/resident/my-room" element={<MyRoom />} />
             <Route
               path="/dashboard"
               element={
