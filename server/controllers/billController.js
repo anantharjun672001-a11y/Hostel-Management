@@ -67,13 +67,21 @@ export const createBill = async (req, res) => {
 // Get All Bills (Admin)
 export const getBills = async (req, res) => {
   try {
-    const bills = await Bill.find().populate("resident").populate("room");
+    const bills = await Bill.find()
+      .populate({
+        path: "resident",
+        populate: {
+          path: "userId",
+          select: "name",
+        },
+      })
+      .populate("room");
+
     res.status(200).json(bills);
   } catch {
     res.status(500).json({ message: "Error Fetching Bills" });
   }
 };
-
 // Resident Bills
 export const getMyBill = async (req, res) => {
   try {
@@ -194,6 +202,11 @@ export const verifyPayment = async (req, res) => {
         type: "payment",
       });
     }
+    await Notification.create({
+      user: resident.userId,
+      message: `Payment successful for ${bill.month}`,
+      type: "payment",
+    });
 
     res.status(200).json({ message: "Payment successful" });
   } catch (error) {
