@@ -11,6 +11,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminCreateBill from "./pages/AdminCreateBill";
 import Rooms from "./pages/admin/Rooms";
 import CreateRoom from "./pages/admin/CreateRoom";
+import AssignRoom from "./pages/admin/AssignRoom";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="/admin/create-bill" element={<AdminCreateBill />} />
             <Route path="/admin/rooms" element={<Rooms/>}/>
             <Route path="/admin/rooms/create" element={<CreateRoom/>}/>
+            <Route path="/admin/rooms/assign" element={<AssignRoom />} />
             <Route
               path="/dashboard"
               element={
