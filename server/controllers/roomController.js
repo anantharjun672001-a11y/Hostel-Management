@@ -8,28 +8,37 @@ dotenv.config();
 
 // Create Room
 
-export const createRoom = async (req,res) => {
-    try {
-        const room = await Room.create(req.body);
-        res.status(201).json(room);
-    } catch (error) {
-        res.status(500).json({ message: "Error Creating Room" });
-    }
-}
+export const createRoom = async (req, res) => {
+  try {
 
+    const { roomNumber } = req.body;
+
+    const existingRoom = await Room.findOne({ roomNumber });
+
+    if (existingRoom) {
+      return res.status(400).json({ message: "Room already exists" });
+    }
+
+    const room = await Room.create(req.body);
+
+    res.status(201).json(room);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error Creating Room" });
+  }
+};
 
 //Get all Rooms
 
-export const getRooms = async (req,res) => {
-    try {
-        const rooms = await Room.find().populate("residents");
-        res.status(200).json(rooms);
-    } catch (error) {
-        res.status(500).json({ message: "Error Fetching Rooms" });
-    }
-}
-
-
+export const getRooms = async (req, res) => {
+  try {
+    const rooms = await Room.find().populate("residents");
+    res.status(200).json(rooms);
+  } catch (error) {
+    res.status(500).json({ message: "Error Fetching Rooms" });
+  }
+};
 
 //Assign Resident to Room
 
@@ -56,14 +65,11 @@ export const assignRoom = async (req, res) => {
       return res.status(400).json({ message: "Room is Full" });
     }
 
-    
     room.residents.push(residentId);
     room.occupied += 1;
 
-   
     resident.room = roomId;
 
-    
     await room.save();
     await resident.save();
 
@@ -71,7 +77,6 @@ export const assignRoom = async (req, res) => {
       message: "Room Assigned Successfully",
       room,
     });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error Assigning Room" });
@@ -102,7 +107,6 @@ export const vacateRoom = async (req, res) => {
 
     room.residents.pull(residentId);
 
-  
     if (room.occupied > 0) {
       room.occupied -= 1;
     }
@@ -110,19 +114,17 @@ export const vacateRoom = async (req, res) => {
     await room.save();
 
     resident.room = null;
-    resident.checkOut = new Date(); 
+    resident.checkOut = new Date();
 
     await resident.save();
 
     res.status(200).json({
       message: "Room vacated successfully",
     });
-
   } catch (error) {
     res.status(500).json({ message: "Error vacating room" });
   }
 };
-
 
 //Room Availability
 
@@ -130,9 +132,8 @@ export const getAvailableRooms = async (req, res) => {
   try {
     const availableRooms = await Room.find({
       $expr: { $lt: ["$occupied", "$capacity"] },
-    }).sort({ occupied: 1 }); 
+    }).sort({ occupied: 1 });
     res.status(200).json(availableRooms);
-
   } catch (error) {
     res.status(500).json({ message: "Error fetching available rooms" });
   }

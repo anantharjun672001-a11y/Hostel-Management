@@ -9,6 +9,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminCreateBill from "./pages/AdminCreateBill";
+import Rooms from "./pages/admin/Rooms";
+import CreateRoom from "./pages/admin/CreateRoom";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin/create-bill" element={<AdminCreateBill />} />
+            <Route path="/admin/rooms" element={<Rooms/>}/>
+            <Route path="/admin/rooms/create" element={<CreateRoom/>}/>
             <Route
               path="/dashboard"
               element={
