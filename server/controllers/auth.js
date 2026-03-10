@@ -93,3 +93,19 @@ export const getResidentUsers = async (req, res) => {
 
   }
 };
+
+//get Staff 
+
+export const getStaffUsers = async (req,res)=>{
+  try{
+
+    const staff = await User.find({ role:"staff" })
+      .select("name email");
+
+    res.status(200).json(staff);
+
+  }catch(error){
+
+    res.status(500).json({message:"Error fetching staff"});
+  }
+}

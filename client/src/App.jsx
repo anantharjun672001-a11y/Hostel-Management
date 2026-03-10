@@ -17,6 +17,9 @@ import MyRoom from "./pages/resident/MyRoom";
 import CreateResident from "./pages/admin/CreateResident";
 import Residents from "./pages/admin/Residents";
 import EditResident from "./pages/admin/EditResident";
+import CreateMaintenance from "./pages/resident/CreateMaintenance";
+import MyMaintenance from "./pages/resident/MyMaintenance";
+import AdminMaintenance from "./pages/admin/AdminMaintenance";
 
 const App = () => {
   return (
@@ -37,6 +40,9 @@ const App = () => {
             <Route path="/admin/residents" element={<Residents/>} />
             <Route path="/admin/residents/create" element={<CreateResident/>} />
             <Route path="/admin/residents/edit/:id" element={<EditResident />} />
+            <Route path="/resident/maintenance/create" element={<CreateMaintenance />} />
+            <Route path="/resident/maintenance" element={<MyMaintenance />} />
+            <Route path="/admin/maintenance" element={<AdminMaintenance />} />
             <Route
               path="/dashboard"
               element={
