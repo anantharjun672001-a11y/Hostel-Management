@@ -24,7 +24,7 @@ const MyRoom = () => {
 
         console.log("API DATA:", res.data);
 
-        setRoom(res.data.room);   // 🔥 IMPORTANT
+        setRoom(res.data.room);   
         setResidentId(res.data._id);
 
       } catch (error) {
@@ -65,7 +65,7 @@ const MyRoom = () => {
 
   };
 
-  if (!room) {
+  if (!room || !room.roomNumber) {
 
     return (
       <div className="p-6">

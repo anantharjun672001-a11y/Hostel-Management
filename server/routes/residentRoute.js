@@ -7,9 +7,10 @@ const router = express.Router();
 
 router.post("/",verifyToken,createResident);
 router.get("/",verifyToken,allowRoles("admin"),getResident);
+router.get("/my-room", verifyToken, getMyRoom);
 router.get("/:id", verifyToken, getResidentById);
 router.put("/:id", verifyToken, updateResident);
-router.get("/my-room", verifyToken, getMyRoom);
+
 
 
 

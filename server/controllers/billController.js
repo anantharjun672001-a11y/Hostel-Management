@@ -5,6 +5,7 @@ import razorpay from "../utils/razorpay.js";
 import crypto from "crypto";
 import PDFDocument from "pdfkit";
 import Notification from "../models/Notification.js";
+import Payment from "../models/Payment.js";
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ export const createBill = async (req, res) => {
       });
     }
 
+
     res.status(201).json(bill);
   } catch (error) {
     console.log(error);
@@ -65,67 +67,130 @@ export const createBill = async (req, res) => {
 };
 
 // Get All Bills (Admin)
-export const getBills = async (req, res) => {
-  try {
-    const bills = await Bill.find()
-      .populate({
-        path: "resident",
-        populate: {
-          path: "userId",
-          select: "name",
-        },
-      })
-      .populate("room");
 
-    res.status(200).json(bills);
-  } catch {
-    res.status(500).json({ message: "Error Fetching Bills" });
-  }
+export const getBills = async (req,res)=>{
+
+ const bills = await Bill.find()
+   .populate({
+     path:"resident",
+     populate:[
+       { path:"userId", select:"name" },
+       { path:"room", select:"roomNumber" }
+     ]
+   })
+   .sort({ createdAt:-1 });
+
+ res.status(200).json(bills);
+
 };
 // Resident Bills
-export const getMyBill = async (req, res) => {
-  try {
-    const resident = await Resident.findOne({ userId: req.user.id });
-    const bills = await Bill.find({ resident: resident._id });
-    res.json(bills);
-  } catch {
-    res.status(500).json({ message: "Error fetching your bills" });
-  }
+export const getMyBill = async (req,res)=>{
+
+ const resident = await Resident.findOne({ userId:req.user.id });
+
+ const bills = await Bill.find({ resident:resident._id })
+   .populate({
+     path:"resident",
+     populate:{
+       path:"room",
+       select:"roomNumber"
+     }
+   })
+   .sort({ createdAt:-1 });
+
+ res.status(200).json(bills);
+
 };
 
 // Payment History
-export const paymentHistory = async (req, res) => {
-  try {
-    const resident = await Resident.findOne({ userId: req.user.id });
 
-    const history = await Bill.find({
-      resident: resident._id,
-      status: "paid",
-    }).populate("room");
+export const paymentHistory = async (req,res)=>{
 
-    res.status(200).json(history);
-  } catch {
-    res.status(500).json({ message: "Error Fetching Payment History" });
-  }
+ try{
+
+  const payments = await Bill.find({ status:"paid" })
+   .populate({
+     path:"resident",
+     populate:[
+       { path:"userId", select:"name" },
+       { path:"room", select:"roomNumber" }
+     ]
+   })
+   .sort({ paymentDate:-1 });
+
+  res.status(200).json(payments);
+
+ }catch(error){
+
+  console.log(error);
+
+  res.status(500).json({
+   message:"Error fetching payments"
+  });
+
+ }
+
 };
 
 // Revenue Report
-export const revenueReport = async (req, res) => {
-  try {
-    const revenue = await Bill.aggregate([
-      { $match: { status: "paid" } },
-      {
-        $group: {
-          _id: null,
-          totalRevenue: { $sum: "$total" },
-        },
-      },
-    ]);
 
-    res.status(200).json(revenue);
-  } catch {
-    res.status(500).json({ message: "Error Fetching Revenue Report" });
-  }
+export const revenueReport = async (req,res)=>{
+ try{
+
+  const totalRevenue = await Bill.aggregate([
+   { $match:{ status:"paid" } },
+   { $group:{ _id:null,total:{ $sum:"$total" } } }
+  ]);
+
+  const paidBills = await Bill.countDocuments({
+   status:"paid"
+  });
+
+  const pendingBills = await Bill.countDocuments({
+   status:{ $ne:"paid" }
+  });
+
+  const monthlyRevenue = await Bill.aggregate([
+   { $match:{ status:"paid" } },
+   {
+    $group:{
+     _id:"$month",
+     revenue:{ $sum:"$total" }
+    }
+   },
+   { $sort:{ _id:1 } }
+  ]);
+
+  const thisMonthRevenue = await Bill.aggregate([
+   {
+    $match:{
+     status:"paid",
+     month:new Date().toISOString().slice(0,7)
+    }
+   },
+   {
+    $group:{
+     _id:null,
+     total:{ $sum:"$total" }
+    }
+   }
+  ]);
+
+  res.status(200).json({
+   totalRevenue: totalRevenue[0]?.total || 0,
+   paidBills,
+   pendingBills,
+   monthlyRevenue,
+   thisMonthRevenue:thisMonthRevenue[0]?.total || 0
+  });
+
+ }catch(error){
+
+  res.status(500).json({
+   message:"Error fetching report"
+  });
+
+ }
 };
 
 // Razorpay → Create Order
@@ -168,20 +233,25 @@ export const createOrder = async (req, res) => {
 
 export const verifyPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-      req.body;
+
+    const {
+      razorpay_payment_id,
+      razorpay_order_id,
+      razorpay_signature
+    } = req.body;
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
-    const expected = crypto
+    const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body)
       .digest("hex");
 
-    if (expected !== razorpay_signature) {
+    if (expectedSignature !== razorpay_signature) {
       return res.status(400).json({ message: "Payment verification failed" });
     }
 
+    // find bill using order id
     const bill = await Bill.findOne({ receipt: razorpay_order_id });
 
     if (!bill) {
@@ -193,27 +263,28 @@ export const verifyPayment = async (req, res) => {
 
     await bill.save();
 
-    const resident = await Resident.findById(bill.resident);
-
-    if (resident?.userId) {
-      await Notification.create({
-        user: resident.userId,
-        message: `Payment successful for ${bill.month}`,
-        type: "payment",
-      });
-    }
-    await Notification.create({
-      user: resident.userId,
-      message: `Payment successful for ${bill.month}`,
-      type: "payment",
+    await Payment.create({
+      residentId: bill.resident,
+      billId: bill._id,
+      amount: bill.total,
+      paymentId: razorpay_payment_id,
+      orderId: razorpay_order_id,
+      status: "Success",
+      method: "Razorpay"
     });
 
-    res.status(200).json({ message: "Payment successful" });
+    res.status(200).json({
+      message: "Payment verified and stored"
+    });
+
   } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({ message: "Error Verifying Payment", error: error.message });
+
+    console.log("VERIFY PAYMENT ERROR:", error);
+
+    res.status(500).json({
+      message: "Payment verification error"
+    });
+
   }
 };
 
@@ -221,9 +292,15 @@ export const verifyPayment = async (req, res) => {
 
 export const generateInvoice = async (req, res) => {
   try {
+
     const bill = await Bill.findById(req.params.id)
-      .populate("resident")
-      .populate("room");
+      .populate({
+        path: "resident",
+        populate: {
+          path: "room",
+          select: "roomNumber"
+        }
+      });
 
     if (!bill) {
       return res.status(404).json({ message: "Bill not found" });
@@ -232,7 +309,7 @@ export const generateInvoice = async (req, res) => {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=invoice-${bill._id}.pdf`,
+      `attachment; filename=invoice-${bill._id}.pdf`
     );
 
     const doc = new PDFDocument({ margin: 50 });
@@ -246,13 +323,19 @@ export const generateInvoice = async (req, res) => {
     doc.moveDown(2);
 
     doc.fontSize(12);
+
     doc.text(`Resident Phone: ${bill.resident?.phone || "-"}`);
-    doc.text(`Room Number: ${bill.room?.roomNumber || "-"}`);
+
+    doc.text(`Room Number: ${bill.resident?.room?.roomNumber || "-"}`);
+
     doc.text(`Month: ${bill.month}`);
+
     doc.text(
       `Payment Date: ${
-        bill.paymentDate ? new Date(bill.paymentDate).toLocaleDateString() : "-"
-      }`,
+        bill.paymentDate
+          ? new Date(bill.paymentDate).toLocaleDateString()
+          : "-"
+      }`
     );
 
     doc.moveDown(2);
@@ -306,8 +389,12 @@ export const generateInvoice = async (req, res) => {
     doc.text("Thank you for your payment!", { align: "center" });
 
     doc.end();
+
   } catch (error) {
+
     console.log(error);
+
     res.status(500).json({ message: "Invoice generation error" });
+
   }
 };

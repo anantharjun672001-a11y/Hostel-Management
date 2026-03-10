@@ -20,6 +20,10 @@ import EditResident from "./pages/admin/EditResident";
 import CreateMaintenance from "./pages/resident/CreateMaintenance";
 import MyMaintenance from "./pages/resident/MyMaintenance";
 import AdminMaintenance from "./pages/admin/AdminMaintenance";
+import MyBills from "./pages/resident/MyBills";
+import Bills from "./pages/admin/Bills";
+import Payments from "./pages/admin/Payments";
+import RevenueReport from "./pages/admin/RevenueReport";
 
 const App = () => {
   return (
@@ -43,6 +47,10 @@ const App = () => {
             <Route path="/resident/maintenance/create" element={<CreateMaintenance />} />
             <Route path="/resident/maintenance" element={<MyMaintenance />} />
             <Route path="/admin/maintenance" element={<AdminMaintenance />} />
+            <Route path="/resident/bills/" element={<MyBills/>} />
+            <Route path="/admin/bills" element={<Bills/>} />
+            <Route path="/admin/payments" element={<Payments/>} />
+            <Route path="/admin/revenue" element={<RevenueReport/>} />
             <Route
               path="/dashboard"
               element={

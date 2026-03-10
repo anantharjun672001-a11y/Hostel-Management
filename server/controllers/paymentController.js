@@ -1,61 +1,66 @@
 import crypto from "crypto";
 import Payment from "../models/Payment.js";
-import Bill from "../models/Bill.js"
+import Bill from "../models/Bill.js";
 
 export const razorpayWebhook = async (req, res) => {
+
+  console.log(" WEBHOOK HIT");
+
   try {
+
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
 
     const signature = req.headers["x-razorpay-signature"];
 
-    const generatedSignature = crypto
+    const expectedSignature = crypto
       .createHmac("sha256", secret)
-      .update(JSON.stringify(req.body))
+      .update(req.body)
       .digest("hex");
 
-    if (generatedSignature !== signature) {
+    if (signature !== expectedSignature) {
       return res.status(400).json({ message: "Invalid signature" });
     }
 
-    
-    const event = req.body.event;
+    const event = JSON.parse(req.body.toString());
 
-    if (event === "payment.captured") {
-      const paymentData = req.body.payload.payment.entity;
+    if (event.event === "payment.captured") {
 
-      const {
-        id: paymentId,
-        order_id: orderId,
-        amount,
-        method
-      } = paymentData;
+      const payment = event.payload.payment.entity;
 
-      
-      const billId = paymentData.notes.billId;
-      const residentId = paymentData.notes.residentId;
+      const billId = payment.notes.billId;
 
-     
-      await Payment.create({
-        residentId,
-        billId,
-        amount: amount / 100,
-        paymentId,
-        orderId,
-        status: "Success",
-        method
-      });
+      const bill = await Bill.findById(billId);
 
-      
-      await Bill.findByIdAndUpdate(billId, {
-        status: "Paid"
-      });
+      if (bill) {
 
-      console.log("Payment saved successfully");
+        bill.status = "paid";
+        bill.paymentDate = new Date();
+        await bill.save();
+
+        await Payment.create({
+          residentId: bill.resident,
+          billId: bill._id,
+          amount: bill.total,
+          paymentId: payment.id,
+          orderId: payment.order_id,
+          status: "Success",
+          method: payment.method
+        });
+
+        console.log(" Payment saved in DB");
+
+      }
+
     }
 
-    res.status(200).json({ received: true });
+    res.status(200).json({ success: true });
+
   } catch (error) {
+
     console.log(error);
+
     res.status(500).json({ message: "Webhook error" });
+
   }
+
 };

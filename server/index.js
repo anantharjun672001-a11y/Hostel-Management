@@ -22,15 +22,14 @@ app.use("/api/payments/webhook",
 app.use(express.json());
 app.use(cors());
 
-
 app.use("/api/auth", authRoutes);
 app.use("/api/resident", residentRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/maintenance",maintenanceRoutes);
 app.use("/api/bill",billRoutes);
-app.use("/api/payments",paymentRoutes)
-app.use("/api/dashboard",dashboardRoutes)
-app.use("/api/notification",notificationRoutes)
+app.use("/api/payments",paymentRoutes);
+app.use("/api/dashboard",dashboardRoutes);
+app.use("/api/notification",notificationRoutes);
 
 
 mongoose

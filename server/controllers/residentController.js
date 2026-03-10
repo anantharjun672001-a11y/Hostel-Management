@@ -91,6 +91,7 @@ export const updateResident = async (req,res)=>{
 // Get My Room (Resident)
 
 export const getMyRoom = async (req, res) => {
+
   try {
 
     const userId = req.user.id || req.user._id;
@@ -99,8 +100,10 @@ export const getMyRoom = async (req, res) => {
       .findOne({ userId })
       .populate("room");
 
-    if (!resident) {
-      return res.status(404).json({ message: "Resident not found" });
+    if (!resident || !resident.room) {
+      return res.status(404).json({
+        message: "No room assigned",
+      });
     }
 
     res.status(200).json(resident);
@@ -109,7 +112,10 @@ export const getMyRoom = async (req, res) => {
 
     console.log(error);
 
-    res.status(500).json({ message: "Error fetching room" });
+    res.status(500).json({
+      message: "Error fetching room",
+    });
 
   }
+
 };

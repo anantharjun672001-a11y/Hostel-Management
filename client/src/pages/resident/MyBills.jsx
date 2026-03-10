@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Bills = () => {
+const MyBills = () => {
   const [bills, setBills] = useState([]);
-  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     fetchBills();
@@ -11,7 +10,7 @@ const Bills = () => {
 
   const fetchBills = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/bill", {
+      const res = await axios.get("http://localhost:3000/api/bill/my", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -22,7 +21,6 @@ const Bills = () => {
       console.log(error);
     }
   };
-
   const downloadInvoice = async (billId) => {
     try {
       const res = await axios.get(
@@ -35,58 +33,34 @@ const Bills = () => {
         },
       );
 
-      const blob = new Blob([res.data], { type: "application/pdf" });
-
-      const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(new Blob([res.data]));
 
       const link = document.createElement("a");
 
       link.href = url;
 
-      link.download = `invoice-${billId}.pdf`;
+      link.setAttribute("download", "invoice.pdf");
 
       document.body.appendChild(link);
 
       link.click();
-
-      link.remove();
-
-      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.log(error);
     }
   };
-  const filteredBills = bills.filter((bill) => {
-    if (filter === "all") return true;
-
-    return bill.status === filter;
-  });
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">All Bills</h1>
-
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="all">All</option>
-          <option value="paid">Paid</option>
-          <option value="unpaid">Unpaid</option>
-        </select>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">My Bills</h1>
       </div>
 
-      {/* Table */}
-
-      <div className="bg-white shadow rounded-lg overflow-x-auto">
+      <div className="bg-white shadow-lg rounded-lg overflow-x-auto">
         <table className="min-w-full">
           <thead className="bg-gray-100">
             <tr className="text-left">
-              <th className="p-3">Resident</th>
-              <th className="p-3">Room</th>
               <th className="p-3">Month</th>
+              <th className="p-3">Room</th>
               <th className="p-3">Amount</th>
               <th className="p-3">Status</th>
               <th className="p-3">Invoice</th>
@@ -94,29 +68,21 @@ const Bills = () => {
           </thead>
 
           <tbody>
-            {filteredBills.length === 0 ? (
+            {bills.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-center p-6 text-gray-500">
+                <td colSpan="5" className="text-center p-6 text-gray-500">
                   No bills found
                 </td>
               </tr>
             ) : (
-              filteredBills.map((bill) => (
-                <tr key={bill._id} className="border-t hover:bg-gray-50">
-                  <td className="p-3 font-medium">
-                    {bill.resident?.userId?.name || "-"}
-                  </td>
+              bills.map((bill) => (
+                <tr
+                  key={bill._id}
+                  className="border-t hover:bg-gray-50 transition"
+                >
+                  <td className="p-3 font-medium">{bill.month}</td>
 
-                  <td className="p-3">
-                    {bill.resident?.room?.roomNumber || "-"}
-                  </td>
-
-                  <td className="p-3">
-                    {new Date(bill.month + "-01").toLocaleString("default", {
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </td>
+                  <td className="p-3">{bill.resident?.room?.roomNumber || "-"}</td>
 
                   <td className="p-3 font-semibold">₹{bill.total}</td>
 
@@ -150,4 +116,4 @@ const Bills = () => {
   );
 };
 
-export default Bills;
+export default MyBills;

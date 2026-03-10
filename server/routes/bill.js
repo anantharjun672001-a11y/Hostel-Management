@@ -14,7 +14,7 @@ router.get("/",verifyToken,allowRoles("admin"),getBills);
 router.get("/my",verifyToken,allowRoles("resident"),getMyBill);
 
 
-router.get("/history",verifyToken,allowRoles("resident"),paymentHistory);
+router.get("/history",verifyToken,allowRoles("admin","resident"),paymentHistory);
 
 router.get("/report",verifyToken,allowRoles("admin"),revenueReport);
 
@@ -22,7 +22,7 @@ router.post("/order/:id",verifyToken,allowRoles("resident"),createOrder);
 
 router.post("/verify-payment", verifyPayment);
 
-router.get("/invoice/:id",verifyToken,allowRoles("resident"),generateInvoice);
+router.get("/invoice/:id",verifyToken,allowRoles("admin","resident"),generateInvoice);
 
 
 export default router;
