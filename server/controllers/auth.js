@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Resident from "../models/Resident.js"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -63,5 +64,32 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
+  }
+};
+
+//get users for residrnt
+
+export const getResidentUsers = async (req, res) => {
+  try {
+
+    
+    const residents = await Resident.find().select("userId");
+
+    const residentUserIds = residents.map(r => r.userId);
+
+    
+    const users = await User.find({
+      role: "resident",
+      _id: { $nin: residentUserIds }
+    }).select("name email");
+
+    res.status(200).json(users);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({ message: "Error fetching users" });
+
   }
 };

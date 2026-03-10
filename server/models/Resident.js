@@ -24,6 +24,7 @@ const residentSchema = new mongoose.Schema(
     },
     checkOut: {
       type: Date,
+      default:null,
     },
     room: {
       type: mongoose.Schema.Types.ObjectId,
