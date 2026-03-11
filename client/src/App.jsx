@@ -25,6 +25,7 @@ import Bills from "./pages/admin/Bills";
 import Payments from "./pages/admin/Payments";
 import RevenueReport from "./pages/admin/RevenueReport";
 import CreateStaff from "./pages/admin/CreateStaff";
+import CreateUsers from "./pages/admin/CreateUsers";
 
 const App = () => {
   return (
@@ -35,7 +36,6 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            
             <Route path="/admin/create-bill" element={<AdminCreateBill />} />
             <Route path="/admin/rooms" element={<Rooms/>}/>
             <Route path="/admin/rooms/create" element={<CreateRoom/>}/>
@@ -53,6 +53,7 @@ const App = () => {
             <Route path="/admin/payments" element={<Payments/>} />
             <Route path="/admin/revenue" element={<RevenueReport/>} />
             <Route path="/admin/create-staff" element={<CreateStaff />} />
+            <Route path="/admin/create-user" element={<CreateUsers />} />
             <Route
               path="/dashboard"
               element={

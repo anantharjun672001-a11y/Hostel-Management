@@ -70,6 +70,9 @@ const Navbar = () => {
           <Link to="/admin/create-staff" className="hover:text-blue-600">
             Create Staff
           </Link>
+          <Link to="/admin/create-user"  className="hover:text-blue-600">
+            Create Resident User
+          </Link>
         </>
       )}
 

@@ -1,10 +1,10 @@
 import express from "express";
-import {createResident,createStaff} from "../controllers/adminController.js";
-import { verifyToken } from "../middleware/authMiddleware.js";
+import {createStaff, createUser} from "../controllers/adminController.js";
+
 
 const router = express.Router();
 
-router.post("/create-resident",createResident);
+router.post("/create-resident",createUser);
 router.post("/create-staff",createStaff);
 
 export default router;
