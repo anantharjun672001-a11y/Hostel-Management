@@ -72,6 +72,8 @@ export const createStaff = async (req, res) => {
  } catch (error) {
 
   console.log(error);
+  console.log("FULL ERROR:", error);
+  console.log("SERVER RESPONSE:", error.response);
   res.status(500).json({ message: "Server error" });
 
  }

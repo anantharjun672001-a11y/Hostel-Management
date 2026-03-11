@@ -12,22 +12,25 @@ const CreateStaff = () => {
 
  const handleSubmit = async () => {
 
+  console.log("BUTTON CLICKED");   // add this
+
   try {
+    const res = await axios.post(
+  "https://stay-hive.onrender.com/api/admin/create-staff",
+  data
+);
+    
 
-   const res = await axios.post(
-    "https://stay-hive.onrender.com/api/admin/create-staff",
-    data
-   );
-
-   toast.success(res.data.message);
+    toast.success(res.data.message);
 
   } catch (error) {
 
-   toast.error(error.response?.data?.message || "Error");
+    console.log("ERROR:", error);
+    toast.error(error.response?.data?.message || "Error");
 
   }
 
- };
+};
 
  return (
 
@@ -49,7 +52,7 @@ const CreateStaff = () => {
     onChange={(e)=>setData({...data,password:e.target.value})}
    />
 
-   <button onClick={handleSubmit}>
+   <button type="button" onClick={handleSubmit}>
     Create Staff
    </button>
 
