@@ -10,6 +10,7 @@ import billRoutes from "./routes/bill.js";
 import paymentRoutes from "./routes/payment.js";
 import dashboardRoutes from "./routes/dashboard.js"
 import notificationRoutes from "./routes/notification.js"
+import adminRoutes from "./routes/adminRoute.js"
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin",adminRoutes)
 app.use("/api/resident", residentRoutes);
 app.use("/api/room", roomRoutes);
 app.use("/api/maintenance",maintenanceRoutes);

@@ -24,6 +24,7 @@ import MyBills from "./pages/resident/MyBills";
 import Bills from "./pages/admin/Bills";
 import Payments from "./pages/admin/Payments";
 import RevenueReport from "./pages/admin/RevenueReport";
+import CreateStaff from "./pages/admin/CreateStaff";
 
 const App = () => {
   return (
@@ -34,7 +35,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            
             <Route path="/admin/create-bill" element={<AdminCreateBill />} />
             <Route path="/admin/rooms" element={<Rooms/>}/>
             <Route path="/admin/rooms/create" element={<CreateRoom/>}/>
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="/admin/bills" element={<Bills/>} />
             <Route path="/admin/payments" element={<Payments/>} />
             <Route path="/admin/revenue" element={<RevenueReport/>} />
+            <Route path="/admin/create-staff" element={<CreateStaff />} />
             <Route
               path="/dashboard"
               element={

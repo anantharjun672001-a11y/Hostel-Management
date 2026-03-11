@@ -64,6 +64,8 @@ const Navbar = () => {
           <Link to="/admin/revenue" className="hover:text-blue-600">
             Revenue
           </Link>
+
+          <Link to="/admin/create-staff">Create Staff</Link>
         </>
       )}
 
