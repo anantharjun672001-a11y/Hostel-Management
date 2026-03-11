@@ -83,25 +83,39 @@ export const getBills = async (req,res)=>{
  res.status(200).json(bills);
 
 };
-// Resident Bills
+
+//Resident Bills
 export const getMyBill = async (req,res)=>{
 
- const resident = await Resident.findOne({ userId:req.user.id });
+  try{
 
- const bills = await Bill.find({ resident:resident._id })
-   .populate({
-     path:"resident",
-     populate:{
-       path:"room",
-       select:"roomNumber"
-     }
-   })
-   .sort({ createdAt:-1 });
+    const resident = await Resident.findOne({ userId:req.user.id });
 
- res.status(200).json(bills);
+    if(!resident){
+      console.log("Resident profile not found for user:", req.user.id);
+      return res.status(200).json([]);
+    }
+
+    const bills = await Bill.find({ resident: resident._id })
+      .populate({
+        path:"resident",
+        populate:{
+          path:"room",
+          select:"roomNumber"
+        }
+      })
+      .sort({ createdAt:-1 });
+
+    res.status(200).json(bills);
+
+  }catch(error){
+
+    console.log("GET MY BILL ERROR:", error);
+    res.status(500).json({message:"Server error"});
+
+  }
 
 };
-
 // Payment History
 
 export const paymentHistory = async (req,res)=>{

@@ -20,7 +20,10 @@ app.use("/api/payments/webhook",
 );
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:"https://stayhive-hostel.vercel.app",
+  credentials:true
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/resident", residentRoutes);

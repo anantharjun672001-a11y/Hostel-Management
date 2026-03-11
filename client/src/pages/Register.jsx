@@ -17,14 +17,17 @@ const Register = () => {
     try {
       const res = await axios.post(
         "https://stay-hive.onrender.com/api/auth/register",
-        data
+        data,
       );
+      console.log("REGISTER RESPONSE:", res.data);
+      if (res.data.token && res.data.user) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
 
-      localStorage.setItem("token", res.data.token);
       toast.success("Registration successful");
 
       navigate("/dashboard");
-
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");
     }
@@ -32,9 +35,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-50 px-4">
-
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-8 border border-gray-100">
-
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
           Create Account
         </h1>
@@ -44,7 +45,6 @@ const Register = () => {
         </p>
 
         <div className="space-y-5">
-
           <div>
             <label className="block mb-1 text-sm font-medium text-gray-700">
               Name
@@ -88,12 +88,12 @@ const Register = () => {
           </div>
 
           <button
+            type="button"
             onClick={handleSubmit}
             className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-medium py-2.5 rounded-lg"
           >
             Register
           </button>
-
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
@@ -105,9 +105,7 @@ const Register = () => {
             Login
           </Link>
         </p>
-
       </div>
-
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import Resident from "../models/Resident.js"
+import Resident from "../models/Resident.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -19,6 +19,11 @@ export const register = async (req, res) => {
       password: hashed,
       role,
     });
+    if (role === "resident") {
+      await Resident.create({
+        userId: user._id,
+      });
+    }
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -30,7 +35,7 @@ export const register = async (req, res) => {
       token,
     });
   } catch (error) {
-    toast.error(error.response?.data?.message || "Registration failed");
+    console.log(error);
 
     res.status(500).json({ message: "Server Error" });
   }
@@ -71,41 +76,31 @@ export const login = async (req, res) => {
 
 export const getResidentUsers = async (req, res) => {
   try {
-
-    
     const residents = await Resident.find().select("userId");
 
-    const residentUserIds = residents.map(r => r.userId);
+    const residentUserIds = residents.map((r) => r.userId);
 
-    
     const users = await User.find({
       role: "resident",
-      _id: { $nin: residentUserIds }
+      _id: { $nin: residentUserIds },
     }).select("name email");
 
     res.status(200).json(users);
-
   } catch (error) {
-
     console.log(error);
 
     res.status(500).json({ message: "Error fetching users" });
-
   }
 };
 
-//get Staff 
+//get Staff
 
-export const getStaffUsers = async (req,res)=>{
-  try{
-
-    const staff = await User.find({ role:"staff" })
-      .select("name email");
+export const getStaffUsers = async (req, res) => {
+  try {
+    const staff = await User.find({ role: "staff" }).select("name email");
 
     res.status(200).json(staff);
-
-  }catch(error){
-
-    res.status(500).json({message:"Error fetching staff"});
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching staff" });
   }
-}
+};
