@@ -18,19 +18,21 @@ const Navbar = () => {
 <nav className="bg-gray-300 border-b border-gray-200 shadow-sm">
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
-    
     <Link to="/" className="text-xl font-bold text-blue-600">
       StayHive
     </Link>
 
     <div className="flex items-center gap-4">
 
-      <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium">
-        Dashboard
-      </Link>
+      {/* Dashboard only after login */}
+      {user && (
+        <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium">
+          Dashboard
+        </Link>
+      )}
 
       {/* ADMIN + STAFF NAVBAR */}
-      {(role === "admin" || role === "staff") && (
+      {user && (role === "admin" || role === "staff") && (
         <>
           <Link to="/admin/rooms" className="hover:text-blue-600">
             Rooms
@@ -47,7 +49,7 @@ const Navbar = () => {
       )}
 
       {/* ADMIN ONLY */}
-      {role === "admin" && (
+      {user && role === "admin" && (
         <>
           <Link to="/admin/bills" className="hover:text-blue-600">
             Bills
@@ -65,12 +67,14 @@ const Navbar = () => {
             Revenue
           </Link>
 
-          <Link to="/admin/create-staff">Create Staff</Link>
+          <Link to="/admin/create-staff" className="hover:text-blue-600">
+            Create Staff
+          </Link>
         </>
       )}
 
       {/* RESIDENT NAVBAR */}
-      {role === "resident" && (
+      {user && role === "resident" && (
         <>
           <Link to="/resident/rooms" className="hover:text-blue-600">
             Rooms
@@ -94,7 +98,7 @@ const Navbar = () => {
         </>
       )}
 
-      {/* Notification Bell */}
+      {/* Notification */}
       {user && <NotificationBell />}
 
       {/* Logout */}
@@ -107,6 +111,7 @@ const Navbar = () => {
         </button>
       )}
 
+      {/* Login button */}
       {!user && (
         <Link
           to="/login"
