@@ -15,7 +15,7 @@ const Navbar = () => {
 
   return (
 
-<nav className="bg-blue-200 border-b border-gray-200 shadow-sm">
+<nav className="bg-gray-300 border-b border-gray-200 shadow-sm">
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
     {/* Logo */}
@@ -23,36 +23,32 @@ const Navbar = () => {
       StayHive
     </Link>
 
-    {/* Menu */}
     <div className="flex items-center gap-4">
 
       <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium">
         Dashboard
       </Link>
 
-      {/* ADMIN NAVBAR */}
-      {role === "admin" && (
+      {/* ADMIN + STAFF NAVBAR */}
+      {(role === "admin" || role === "staff") && (
         <>
           <Link to="/admin/rooms" className="hover:text-blue-600">
             Rooms
-          </Link>
-
-          <Link to="/admin/rooms/create" className="hover:text-blue-600">
-            Create Room
-          </Link>
-
-          <Link to="/admin/rooms/assign" className="hover:text-blue-600">
-            Assign Room
           </Link>
 
           <Link to="/admin/residents" className="hover:text-blue-600">
             Residents
           </Link>
 
-          <Link to="/admin/residents/create" className="hover:text-blue-600">
-            Create Resident
+          <Link to="/admin/maintenance" className="hover:text-blue-600">
+            Maintenance
           </Link>
+        </>
+      )}
 
+      {/* ADMIN ONLY */}
+      {role === "admin" && (
+        <>
           <Link to="/admin/bills" className="hover:text-blue-600">
             Bills
           </Link>
@@ -67,10 +63,6 @@ const Navbar = () => {
 
           <Link to="/admin/revenue" className="hover:text-blue-600">
             Revenue
-          </Link>
-
-          <Link to="/admin/maintenance" className="hover:text-blue-600">
-            Maintenance
           </Link>
         </>
       )}
@@ -90,12 +82,12 @@ const Navbar = () => {
             My Bills
           </Link>
 
-          <Link to="/resident/maintenance" className="hover:text-blue-600">
-            Maintenance
-          </Link>
-
           <Link to="/resident/maintenance/create" className="hover:text-blue-600">
             Create Request
+          </Link>
+
+          <Link to="/resident/maintenance" className="hover:text-blue-600">
+            Maintenance
           </Link>
         </>
       )}

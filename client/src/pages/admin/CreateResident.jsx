@@ -18,7 +18,6 @@ const CreateResident = () => {
     checkOut: ""
   });
 
-  
   useEffect(() => {
 
     const fetchUsers = async () => {
@@ -33,7 +32,7 @@ const CreateResident = () => {
             }
           }
         );
-        console.log(res.data);
+
         setUsers(res.data);
 
       } catch (error) {
@@ -89,86 +88,130 @@ const CreateResident = () => {
 
   return (
 
-    <div className="p-6">
+    <div className="max-w-4xl mx-auto p-6">
 
-      <div className="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
+      <div className="bg-white border border-gray-100 shadow-md rounded-xl p-8">
 
-        <h1 className="text-2xl font-bold mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
           Create Resident
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
           {/* User Dropdown */}
 
-          <select
-            name="userId"
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          >
-            <option value="">Select User</option>
+          <div>
 
-            {users.map((user) => (
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Select User
+            </label>
 
-              <option key={user._id} value={user._id}>
-                {user.name} ({user.email})
-              </option>
+            <select
+              name="userId"
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            >
+              <option value="">Select User</option>
 
-            ))}
+              {users.map((user) => (
 
-          </select>
+                <option key={user._id} value={user._id}>
+                  {user.name} ({user.email})
+                </option>
 
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone Number"
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
+              ))}
 
-          <input
-            type="text"
-            name="emergencyContact"
-            placeholder="Emergency Contact"
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
+            </select>
 
-          <textarea
-            name="address"
-            placeholder="Address"
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
+          </div>
 
-          <label className="text-sm font-medium">
-            Check In Date
-          </label>
+          <div>
 
-          <input
-            type="date"
-            name="checkIn"
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Phone Number
+            </label>
 
-          <label className="text-sm font-medium">
-            Check Out Date
-          </label>
+            <input
+              type="text"
+              name="phone"
+              placeholder="Enter phone number"
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            />
 
-          <input
-            type="date"
-            name="checkOut"
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
+          </div>
+
+          <div>
+
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Emergency Contact
+            </label>
+
+            <input
+              type="text"
+              name="emergencyContact"
+              placeholder="Enter emergency contact"
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+
+          </div>
+
+          <div>
+
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Address
+            </label>
+
+            <textarea
+              name="address"
+              placeholder="Enter address"
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div>
+
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Check In Date
+              </label>
+
+              <input
+                type="date"
+                name="checkIn"
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+
+            </div>
+
+            <div>
+
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Check Out Date
+              </label>
+
+              <input
+                type="date"
+                name="checkOut"
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+
+            </div>
+
+          </div>
 
           <button
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-medium py-2.5 rounded-lg"
           >
             Create Resident
           </button>

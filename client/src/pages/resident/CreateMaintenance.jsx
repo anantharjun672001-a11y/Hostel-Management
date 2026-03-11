@@ -53,39 +53,55 @@ const CreateMaintenance = () => {
 
   return (
 
-    <div className="p-6">
+    <div className="max-w-4xl mx-auto p-6">
 
-      <div className="max-w-xl mx-auto bg-white shadow rounded-lg p-6">
+      <div className="bg-white border border-gray-100 shadow-md rounded-xl p-8">
 
-        <h1 className="text-2xl font-bold mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
           Create Maintenance Request
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
-          <textarea
-            name="issue"
-            placeholder="Describe your issue"
-            value={form.issue}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            rows="4"
-            required
-          />
+          <div>
 
-          <select
-            name="priority"
-            value={form.priority}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          >
-            <option value="low">Low Priority</option>
-            <option value="medium">Medium Priority</option>
-            <option value="high">High Priority</option>
-          </select>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Issue Description
+            </label>
+
+            <textarea
+              name="issue"
+              placeholder="Describe your issue"
+              value={form.issue}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              rows="4"
+              required
+            />
+
+          </div>
+
+          <div>
+
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Priority
+            </label>
+
+            <select
+              name="priority"
+              value={form.priority}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+
+          </div>
 
           <button
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-medium py-2.5 rounded-lg"
           >
             Submit Request
           </button>

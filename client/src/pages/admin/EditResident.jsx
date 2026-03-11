@@ -97,71 +97,107 @@ const EditResident = () => {
 
   return (
 
-    <div className="p-6">
+    <div className="max-w-4xl mx-auto p-6">
 
-      <div className="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
+      <div className="bg-white border border-gray-100 shadow-md rounded-xl p-8">
 
-        <h1 className="text-2xl font-bold mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
           Edit Resident
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
-          <input
-            type="text"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            placeholder="Phone"
-            className="w-full border p-2 rounded"
-            required
-          />
+          <div>
 
-          <input
-            type="text"
-            name="emergencyContact"
-            value={form.emergencyContact}
-            onChange={handleChange}
-            placeholder="Emergency Contact"
-            className="w-full border p-2 rounded"
-            required
-          />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Phone Number
+            </label>
 
-          <textarea
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            placeholder="Address"
-            className="w-full border p-2 rounded"
-            required
-          />
+            <input
+              type="text"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="Enter phone number"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            />
 
-          <label className="text-sm font-medium">
-            Check In
-          </label>
+          </div>
 
-          <input
-            type="date"
-            name="checkIn"
-            value={form.checkIn}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
+          <div>
 
-          <label className="text-sm font-medium">
-            Check Out
-          </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Emergency Contact
+            </label>
 
-          <input
-            type="date"
-            name="checkOut"
-            value={form.checkOut}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
+            <input
+              type="text"
+              name="emergencyContact"
+              value={form.emergencyContact}
+              onChange={handleChange}
+              placeholder="Enter emergency contact"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+
+          </div>
+
+          <div>
+
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Address
+            </label>
+
+            <textarea
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              placeholder="Enter address"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div>
+
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Check In Date
+              </label>
+
+              <input
+                type="date"
+                name="checkIn"
+                value={form.checkIn}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+
+            </div>
+
+            <div>
+
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Check Out Date
+              </label>
+
+              <input
+                type="date"
+                name="checkOut"
+                value={form.checkOut}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+
+            </div>
+
+          </div>
 
           <button
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-medium py-2.5 rounded-lg"
           >
             Update Resident
           </button>

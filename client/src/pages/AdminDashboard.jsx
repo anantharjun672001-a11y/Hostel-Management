@@ -32,14 +32,17 @@ const AdminDashboard = () => {
     fetchStats();
   }, []);
 
-  if (!stats) return <p>Loading...</p>;
+  if (!stats)
+    return (
+      <div className="p-10 text-center text-gray-500">
+        Loading dashboard...
+      </div>
+    );
 
- 
   const revenueData = [
     { name: "Revenue", value: stats.revenue },
   ];
 
-  
   const occupancyData = [
     { name: "Occupied", value: stats.occupied },
     { name: "Available", value: stats.totalCapacity - stats.occupied },
@@ -48,57 +51,85 @@ const AdminDashboard = () => {
   const COLORS = ["#4ade80", "#f87171"];
 
   return (
-    <div className="p-6 space-y-10">
-      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+    <div className="max-w-7xl mx-auto p-6 space-y-10">
 
-      
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white shadow p-4 rounded">
-          <h2>Total Revenue</h2>
-          <p>₹{stats.revenue}</p>
+      <h1 className="text-3xl font-bold text-gray-800">
+        Admin Dashboard
+      </h1>
+
+      {/* Stats Cards */}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6">
+          <h2 className="text-gray-500 text-sm">
+            Total Revenue
+          </h2>
+          <p className="text-2xl font-bold text-green-600 mt-2">
+            ₹{stats.revenue}
+          </p>
         </div>
 
-        <div className="bg-white shadow p-4 rounded">
-          <h2>Total Residents</h2>
-          <p>{stats.totalResidents}</p>
+        <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6">
+          <h2 className="text-gray-500 text-sm">
+            Total Residents
+          </h2>
+          <p className="text-2xl font-bold mt-2">
+            {stats.totalResidents}
+          </p>
         </div>
 
-        <div className="bg-white shadow p-4 rounded">
-          <h2>Occupied</h2>
-          <p>{stats.occupied}</p>
+        <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6">
+          <h2 className="text-gray-500 text-sm">
+            Occupied Rooms
+          </h2>
+          <p className="text-2xl font-bold mt-2">
+            {stats.occupied}
+          </p>
         </div>
 
-        <div className="bg-white shadow p-4 rounded">
-          <h2>Pending Maintenance</h2>
-          <p>{stats.pendingMaintenance}</p>
+        <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6">
+          <h2 className="text-gray-500 text-sm">
+            Pending Maintenance
+          </h2>
+          <p className="text-2xl font-bold text-red-500 mt-2">
+            {stats.pendingMaintenance}
+          </p>
         </div>
+
       </div>
 
-      
-      <div className="bg-white p-4 rounded shadow">
-        <h2 className="mb-4">Revenue Overview</h2>
+      {/* Revenue Chart */}
 
-        <ResponsiveContainer width="100%" height={250}>
+      <div className="bg-white border border-gray-100 rounded-xl shadow-md p-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">
+          Revenue Overview
+        </h2>
+
+        <ResponsiveContainer width="100%" height={260}>
           <BarChart data={revenueData}>
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="value" />
+            <Bar dataKey="value" fill="#3b82f6" />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      
-      <div className="bg-white p-4 rounded shadow">
-        <h2 className="mb-4">Room Occupancy</h2>
+      {/* Occupancy Chart */}
 
-        <ResponsiveContainer width="100%" height={250}>
+      <div className="bg-white border border-gray-100 rounded-xl shadow-md p-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">
+          Room Occupancy
+        </h2>
+
+        <ResponsiveContainer width="100%" height={260}>
           <PieChart>
             <Pie
               data={occupancyData}
               dataKey="value"
               nameKey="name"
-              outerRadius={80}
+              outerRadius={90}
               label
             >
               {occupancyData.map((entry, index) => (
@@ -108,6 +139,7 @@ const AdminDashboard = () => {
           </PieChart>
         </ResponsiveContainer>
       </div>
+
     </div>
   );
 };

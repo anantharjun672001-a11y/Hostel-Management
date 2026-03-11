@@ -43,16 +43,24 @@ export const getRooms = async (req, res) => {
 export const assignRoom = async (req, res) => {
   try {
 
-    const { roomId } = req.body;
-
-    const userId = req.user.id || req.user._id;
+    const { roomId, residentId } = req.body;
 
     const room = await Room.findById(roomId);
 
-    const resident = await Resident.findOne({ userId });
-
     if (!room) {
       return res.status(404).json({ message: "Room Not Found" });
+    }
+
+    let resident;
+
+    // ADMIN / STAFF assign
+    if (residentId) {
+      resident = await Resident.findById(residentId);
+    } 
+    // RESIDENT self assign
+    else {
+      const userId = req.user.id || req.user._id;
+      resident = await Resident.findOne({ userId });
     }
 
     if (!resident) {
@@ -87,7 +95,6 @@ export const assignRoom = async (req, res) => {
 
   }
 };
-
 
 
 // Vacate Room

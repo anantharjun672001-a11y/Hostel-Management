@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const MyBills = () => {
+
   const [bills, setBills] = useState([]);
 
   useEffect(() => {
@@ -9,20 +10,32 @@ const MyBills = () => {
   }, []);
 
   const fetchBills = async () => {
+
     try {
-      const res = await axios.get("http://localhost:3000/api/bill/my", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+
+      const res = await axios.get(
+        "http://localhost:3000/api/bill/my",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       setBills(res.data);
+
     } catch (error) {
+
       console.log(error);
+
     }
+
   };
+
   const downloadInvoice = async (billId) => {
+
     try {
+
       const res = await axios.get(
         `http://localhost:3000/api/bill/invoice/${billId}`,
         {
@@ -44,76 +57,118 @@ const MyBills = () => {
       document.body.appendChild(link);
 
       link.click();
+
     } catch (error) {
+
       console.log(error);
+
     }
+
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">My Bills</h1>
-      </div>
 
-      <div className="bg-white shadow-lg rounded-lg overflow-x-auto">
-        <table className="min-w-full">
-          <thead className="bg-gray-100">
-            <tr className="text-left">
-              <th className="p-3">Month</th>
-              <th className="p-3">Room</th>
-              <th className="p-3">Amount</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Invoice</th>
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+
+      <h1 className="text-3xl font-bold text-gray-800">
+        My Bills
+      </h1>
+
+      <div className="bg-white border border-gray-100 shadow-md rounded-xl overflow-x-auto">
+
+        <table className="w-full text-sm text-left text-gray-600">
+
+          <thead className="bg-gray-50 text-gray-700 text-xs uppercase">
+
+            <tr>
+
+              <th className="px-6 py-3">Month</th>
+              <th className="px-6 py-3">Room</th>
+              <th className="px-6 py-3">Amount</th>
+              <th className="px-6 py-3">Status</th>
+              <th className="px-6 py-3">Invoice</th>
+
             </tr>
+
           </thead>
 
           <tbody>
+
             {bills.length === 0 ? (
+
               <tr>
-                <td colSpan="5" className="text-center p-6 text-gray-500">
+
+                <td
+                  colSpan="5"
+                  className="text-center px-6 py-8 text-gray-500"
+                >
                   No bills found
                 </td>
+
               </tr>
+
             ) : (
+
               bills.map((bill) => (
+
                 <tr
                   key={bill._id}
                   className="border-t hover:bg-gray-50 transition"
                 >
-                  <td className="p-3 font-medium">{bill.month}</td>
 
-                  <td className="p-3">{bill.resident?.room?.roomNumber || "-"}</td>
+                  <td className="px-6 py-4 font-medium">
+                    {bill.month}
+                  </td>
 
-                  <td className="p-3 font-semibold">₹{bill.total}</td>
+                  <td className="px-6 py-4">
+                    {bill.resident?.room?.roomNumber || "-"}
+                  </td>
 
-                  <td className="p-3">
+                  <td className="px-6 py-4 font-semibold text-blue-600">
+                    ₹{bill.total}
+                  </td>
+
+                  <td className="px-6 py-4">
+
                     <span
                       className={
                         bill.status === "paid"
-                          ? "px-3 py-1 rounded-full text-sm bg-green-100 text-green-700"
-                          : "px-3 py-1 rounded-full text-sm bg-red-100 text-red-700"
+                          ? "bg-green-100 text-green-600 text-xs font-medium px-3 py-1 rounded-full"
+                          : "bg-red-100 text-red-600 text-xs font-medium px-3 py-1 rounded-full"
                       }
                     >
                       {bill.status}
                     </span>
+
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-6 py-4">
+
                     <button
                       onClick={() => downloadInvoice(bill._id)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                      className="bg-blue-600 hover:bg-blue-700 transition text-white text-sm px-3 py-1.5 rounded-lg"
                     >
                       Download
                     </button>
+
                   </td>
+
                 </tr>
+
               ))
+
             )}
+
           </tbody>
+
         </table>
+
       </div>
+
     </div>
+
   );
+
 };
 
 export default MyBills;

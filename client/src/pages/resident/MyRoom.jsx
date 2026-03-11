@@ -22,9 +22,7 @@ const MyRoom = () => {
           }
         );
 
-        console.log("API DATA:", res.data);
-
-        setRoom(res.data.room);   
+        setRoom(res.data.room);
         setResidentId(res.data._id);
 
       } catch (error) {
@@ -68,11 +66,16 @@ const MyRoom = () => {
   if (!room || !room.roomNumber) {
 
     return (
-      <div className="p-6">
-        <h1 className="text-2xl font-bold">My Room</h1>
-        <p className="mt-4 text-gray-500">
+      <div className="max-w-5xl mx-auto p-6">
+
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+          My Room
+        </h1>
+
+        <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6 text-gray-500">
           You have not chosen a room yet.
-        </p>
+        </div>
+
       </div>
     );
 
@@ -80,33 +83,37 @@ const MyRoom = () => {
 
   return (
 
-    <div className="p-6">
+    <div className="max-w-5xl mx-auto p-6 space-y-6">
 
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 className="text-3xl font-bold text-gray-800">
         My Room
       </h1>
 
-      <div className="max-w-md bg-white shadow-lg rounded-lg p-6">
+      <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6 max-w-md">
 
         <h2 className="text-xl font-semibold mb-4">
           Room {room.roomNumber}
         </h2>
 
-        <p className="text-gray-600">
-          Type: {room.type}
-        </p>
+        <div className="space-y-2 text-gray-600">
 
-        <p className="text-gray-600">
-          Capacity: {room.capacity}
-        </p>
+          <p>
+            <span className="font-medium">Type:</span> {room.type}
+          </p>
 
-        <p className="text-gray-600 mb-4">
-          Occupied: {room.occupied}/{room.capacity}
-        </p>
+          <p>
+            <span className="font-medium">Capacity:</span> {room.capacity}
+          </p>
+
+          <p>
+            <span className="font-medium">Occupied:</span> {room.occupied}/{room.capacity}
+          </p>
+
+        </div>
 
         <button
           onClick={handleVacate}
-          className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+          className="mt-6 w-full bg-red-600 hover:bg-red-700 transition text-white py-2 rounded-lg"
         >
           Vacate Room
         </button>

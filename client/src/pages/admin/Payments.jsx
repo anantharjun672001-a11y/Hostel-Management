@@ -74,27 +74,27 @@ const Payments = () => {
 
   return(
 
-    <div className="p-6 space-y-6">
+    <div className="max-w-7xl mx-auto p-6 space-y-6">
 
-      <h1 className="text-2xl font-bold">
+      <h1 className="text-3xl font-bold text-gray-800">
         Payment History
       </h1>
 
-      <div className="bg-white shadow rounded-lg overflow-x-auto">
+      <div className="bg-white border border-gray-100 shadow-md rounded-xl overflow-x-auto">
 
-        <table className="min-w-full">
+        <table className="w-full text-sm text-left text-gray-600">
 
-          <thead className="bg-gray-100">
+          <thead className="bg-gray-50 text-gray-700 text-xs uppercase">
 
-            <tr className="text-left">
+            <tr>
 
-              <th className="p-3">Resident</th>
-              <th className="p-3">Room</th>
-              <th className="p-3">Month</th>
-              <th className="p-3">Amount</th>
-              <th className="p-3">Receipt</th>
-              <th className="p-3">Date</th>
-              <th className="p-3">Invoice</th>
+              <th className="px-6 py-3">Resident</th>
+              <th className="px-6 py-3">Room</th>
+              <th className="px-6 py-3">Month</th>
+              <th className="px-6 py-3">Amount</th>
+              <th className="px-6 py-3">Receipt</th>
+              <th className="px-6 py-3">Date</th>
+              <th className="px-6 py-3">Invoice</th>
 
             </tr>
 
@@ -105,9 +105,14 @@ const Payments = () => {
             {payments.length === 0 ? (
 
               <tr>
-                <td colSpan="7" className="text-center p-6 text-gray-500">
+
+                <td
+                  colSpan="7"
+                  className="text-center px-6 py-8 text-gray-500"
+                >
                   No payments found
                 </td>
+
               </tr>
 
             ) : (
@@ -116,33 +121,33 @@ const Payments = () => {
 
                 <tr
                   key={payment._id}
-                  className="border-t hover:bg-gray-50"
+                  className="border-t hover:bg-gray-50 transition"
                 >
 
-                  <td className="p-3 font-medium">
+                  <td className="px-6 py-4 font-medium text-gray-900">
                     {payment.resident?.userId?.name}
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-6 py-4">
                     {payment.resident?.room?.roomNumber || "-"}
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-6 py-4">
                     {new Date(payment.month + "-01").toLocaleString("default",{
                       month:"long",
                       year:"numeric"
                     })}
                   </td>
 
-                  <td className="p-3 font-semibold">
+                  <td className="px-6 py-4 font-semibold text-green-600">
                     ₹{payment.total}
                   </td>
 
-                  <td className="p-3 text-sm text-gray-600">
+                  <td className="px-6 py-4 text-sm text-gray-600">
                     {payment.receipt}
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-6 py-4">
 
                     {payment.paymentDate
                       ? new Date(payment.paymentDate).toLocaleDateString()
@@ -150,11 +155,11 @@ const Payments = () => {
 
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-6 py-4">
 
                     <button
                       onClick={()=>downloadInvoice(payment._id)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                      className="bg-blue-600 hover:bg-blue-700 transition text-white text-sm px-3 py-1.5 rounded-lg"
                     >
                       Download
                     </button>
