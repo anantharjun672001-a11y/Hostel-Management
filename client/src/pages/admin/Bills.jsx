@@ -11,7 +11,7 @@ const Bills = () => {
 
   const fetchBills = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/bill", {
+      const res = await axios.get("https://stay-hive.onrender.com/api/bill", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -26,7 +26,7 @@ const Bills = () => {
   const downloadInvoice = async (billId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/bill/invoice/${billId}`,
+        `https://stay-hive.onrender.com/api/bill/invoice/${billId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

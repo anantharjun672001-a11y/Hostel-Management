@@ -18,7 +18,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       const { data } = await axios.get(
-        "http://localhost:3000/api/dashboard",
+        "https://stay-hive.onrender.com/api/dashboard",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

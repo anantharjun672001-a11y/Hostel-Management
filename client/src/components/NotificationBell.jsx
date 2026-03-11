@@ -11,7 +11,7 @@ const NotificationBell = () => {
     const fetchNotifications = async () => {
 
       const { data } = await axios.get(
-        "http://localhost:3000/api/notification",
+        "https://stay-hive.onrender.com/api/notification",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -34,7 +34,7 @@ const NotificationBell = () => {
   const markAsRead = async (id) => {
 
     await axios.put(
-      `http://localhost:3000/api/notification/${id}`,
+      `https://stay-hive.onrender.com/api/notification/${id}`,
       {},
       {
         headers: {

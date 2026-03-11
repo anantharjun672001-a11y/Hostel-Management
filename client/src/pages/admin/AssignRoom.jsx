@@ -19,7 +19,7 @@ const AssignRoom = () => {
     const fetchData = async () => {
 
       const resResidents = await axios.get(
-        "http://localhost:3000/api/resident",
+        "https://stay-hive.onrender.com/api/resident",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -28,7 +28,7 @@ const AssignRoom = () => {
       );
 
       const resRooms = await axios.get(
-        "http://localhost:3000/api/room/available",
+        "https://stay-hive.onrender.com/api/room/available",
       );
 
       setResidents(resResidents.data);
@@ -48,7 +48,7 @@ const AssignRoom = () => {
     try {
 
       await axios.post(
-        "http://localhost:3000/api/room/assign",
+        "https://stay-hive.onrender.com/api/room/assign",
         form,
         {
           headers: {
@@ -64,7 +64,7 @@ const AssignRoom = () => {
         roomId: "",
       });
 
-      // 🔥 NEW LOGIC
+      
       navigate("/admin/rooms");
 
     } catch (error) {

@@ -12,7 +12,7 @@ const RoomTable = () => {
       try {
 
         const res = await axios.get(
-          "http://localhost:3000/api/room",
+          "https://stay-hive.onrender.com/api/room",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -21,7 +21,7 @@ const StaffDashboard = () => {
     try{
 
       const res = await axios.get(
-        "http://localhost:3000/api/maintenance",
+        "https://stay-hive.onrender.com/api/maintenance",
         {
           headers:{
             Authorization:`Bearer ${localStorage.getItem("token")}`

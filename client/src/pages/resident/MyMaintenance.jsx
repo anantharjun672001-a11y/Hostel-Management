@@ -12,7 +12,7 @@ const MyMaintenance = () => {
       try{
 
         const res = await axios.get(
-          "http://localhost:3000/api/maintenance/my",
+          "https://stay-hive.onrender.com/api/maintenance/my",
           {
             headers:{
               Authorization:`Bearer ${localStorage.getItem("token")}`

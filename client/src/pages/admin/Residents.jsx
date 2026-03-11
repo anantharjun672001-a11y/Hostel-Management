@@ -8,7 +8,7 @@ const Residents = () => {
   useEffect(() => {
     const fetchResidents = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/resident", {
+        const res = await axios.get("https://stay-hive.onrender.com/api/resident", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

@@ -24,7 +24,7 @@ const RevenueReport = ()=>{
   try{
 
    const res = await axios.get(
-    "http://localhost:3000/api/bill/report",
+    "https://stay-hive.onrender.com/api/bill/report",
     {
      headers:{
       Authorization:`Bearer ${localStorage.getItem("token")}`

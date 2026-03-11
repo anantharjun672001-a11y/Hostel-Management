@@ -28,7 +28,7 @@ const CreateMaintenance = () => {
     try {
 
       await axios.post(
-        "http://localhost:3000/api/maintenance",
+        "https://stay-hive.onrender.com/api/maintenance",
         form,
         {
           headers:{

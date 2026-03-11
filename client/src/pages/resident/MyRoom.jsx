@@ -14,7 +14,7 @@ const MyRoom = () => {
       try {
 
         const res = await axios.get(
-          "http://localhost:3000/api/resident/my-room",
+          "https://stay-hive.onrender.com/api/resident/my-room",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -42,7 +42,7 @@ const MyRoom = () => {
     try {
 
       await axios.post(
-        "http://localhost:3000/api/room/vacate",
+        "https://stay-hive.onrender.com/api/room/vacate",
         { residentId },
         {
           headers: {

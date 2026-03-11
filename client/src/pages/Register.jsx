@@ -16,7 +16,7 @@ const Register = () => {
   const handleSubmit = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "https://stay-hive.onrender.com/api/auth/register",
         data
       );
 

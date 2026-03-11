@@ -13,7 +13,7 @@ const AvailableRooms = () => {
       try {
 
         const res = await axios.get(
-          "http://localhost:3000/api/room/available"
+          "https://stay-hive.onrender.com/api/room/available"
         );
 
         setRooms(res.data);
@@ -35,7 +35,7 @@ const AvailableRooms = () => {
     try {
 
       await axios.post(
-        "http://localhost:3000/api/room/assign",
+        "https://stay-hive.onrender.com/api/room/assign",
         {
           roomId
         },
@@ -49,7 +49,7 @@ const AvailableRooms = () => {
       toast.success("Room assigned successfully");
 
       const res = await axios.get(
-        "http://localhost:3000/api/room/available"
+        "https://stay-hive.onrender.com/api/room/available"
       );
 
       setRooms(res.data);

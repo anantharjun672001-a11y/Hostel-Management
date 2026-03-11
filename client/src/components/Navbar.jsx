@@ -18,7 +18,7 @@ const Navbar = () => {
 <nav className="bg-gray-300 border-b border-gray-200 shadow-sm">
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
-    {/* Logo */}
+    
     <Link to="/" className="text-xl font-bold text-blue-600">
       StayHive
     </Link>

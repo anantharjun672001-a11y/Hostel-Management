@@ -10,7 +10,7 @@ const Notifications = () => {
     const fetch = async () => {
 
       const { data } = await axios.get(
-        "http://localhost:3000/api/notifications",
+        "https://stay-hive.onrender.com/api/notifications",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

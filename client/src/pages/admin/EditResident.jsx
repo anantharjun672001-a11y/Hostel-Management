@@ -23,7 +23,7 @@ const EditResident = () => {
       try {
 
         const res = await axios.get(
-          `http://localhost:3000/api/resident/${id}`,
+          `https://stay-hive.onrender.com/api/resident/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -72,7 +72,7 @@ const EditResident = () => {
     try {
 
       await axios.put(
-        `http://localhost:3000/api/resident/${id}`,
+        `https://stay-hive.onrender.com/api/resident/${id}`,
         form,
         {
           headers: {
