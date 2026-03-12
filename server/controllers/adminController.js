@@ -3,17 +3,15 @@ import Resident from "../models/Resident.js";
 import bcrypt from "bcrypt";
 
 export const createUser = async (req, res) => {
-
   try {
 
-    const {
-      name,
-      email,
-      password,
-      phone,
-      address,
-      emergencyContact
-    } = req.body;
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+    }
 
     const existingUser = await User.findOne({ email });
 
@@ -23,24 +21,18 @@ export const createUser = async (req, res) => {
       });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       name,
       email,
-      password: hashed,
+      password: hashedPassword,
       role: "resident"
     });
 
-    await Resident.create({
-      userId: user._id,
-      phone,
-      address,
-      emergencyContact
-    });
-
     res.status(201).json({
-      message: "Resident user created successfully"
+      message: "Resident user created successfully",
+      user
     });
 
   } catch (error) {
@@ -52,8 +44,9 @@ export const createUser = async (req, res) => {
     });
 
   }
-
 };
+
+
 //Create Staff
 
 export const createStaff = async (req, res) => {

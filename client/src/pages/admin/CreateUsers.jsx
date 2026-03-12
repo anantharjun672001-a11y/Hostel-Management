@@ -8,12 +8,11 @@ const CreateUsers = () => {
     name: "",
     email: "",
     password: "",
-    phone: "",
-    address: "",
-    emergencyContact: "",
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
 
     try {
 
@@ -29,19 +28,16 @@ const CreateUsers = () => {
 
       toast.success(res.data.message);
 
-      // clear form
       setData({
         name: "",
         email: "",
         password: "",
-        phone: "",
-        address: "",
-        emergencyContact: "",
       });
 
     } catch (error) {
 
       console.log(error);
+
       toast.error(error.response?.data?.message || "Error");
 
     }
@@ -57,7 +53,7 @@ const CreateUsers = () => {
           Create Resident User
         </h2>
 
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
 
           <input
             type="text"
@@ -65,6 +61,7 @@ const CreateUsers = () => {
             value={data.name}
             onChange={(e) => setData({ ...data, name: e.target.value })}
             className="w-full border p-2 rounded-lg"
+            required
           />
 
           <input
@@ -73,6 +70,7 @@ const CreateUsers = () => {
             value={data.email}
             onChange={(e) => setData({ ...data, email: e.target.value })}
             className="w-full border p-2 rounded-lg"
+            required
           />
 
           <input
@@ -81,41 +79,17 @@ const CreateUsers = () => {
             value={data.password}
             onChange={(e) => setData({ ...data, password: e.target.value })}
             className="w-full border p-2 rounded-lg"
-          />
-
-          <input
-            type="text"
-            placeholder="Phone"
-            value={data.phone}
-            onChange={(e) => setData({ ...data, phone: e.target.value })}
-            className="w-full border p-2 rounded-lg"
-          />
-
-          <input
-            type="text"
-            placeholder="Address"
-            value={data.address}
-            onChange={(e) => setData({ ...data, address: e.target.value })}
-            className="w-full border p-2 rounded-lg"
-          />
-
-          <input
-            type="text"
-            placeholder="Emergency Contact"
-            value={data.emergencyContact}
-            onChange={(e) => setData({ ...data, emergencyContact: e.target.value })}
-            className="w-full border p-2 rounded-lg"
+            required
           />
 
           <button
-            type="button"
-            onClick={handleSubmit}
+            type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
           >
             Create Resident
           </button>
 
-        </div>
+        </form>
 
       </div>
 
