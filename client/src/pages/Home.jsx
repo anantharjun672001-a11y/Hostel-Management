@@ -26,13 +26,6 @@ const Home = () => {
             Login
           </Link>
 
-          <Link
-            to="/register"
-            className="bg-white border border-gray-300 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition"
-          >
-            Register
-          </Link>
-
         </div>
       </div>
 
