@@ -71,7 +71,7 @@ const Navbar = () => {
             Create Staff
           </Link>
           <Link to="/admin/create-user"  className="hover:text-blue-600">
-            Create Resident User
+            Create User
           </Link>
         </>
       )}
