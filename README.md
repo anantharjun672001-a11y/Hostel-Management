@@ -28,7 +28,7 @@ https://stayhive-hostel.vercel.app/
 
 Clone the repository
 
-git clone https://github.com/yourusername/repo-name
+git clone (https://github.com/anantharjun672001-a11y/Hostel-Management)
 
 Backend setup
 
