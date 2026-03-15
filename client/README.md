@@ -1,16 +1,119 @@
-# React + Vite
+# StayHive - Hostel Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+StayHive is a full-stack Hostel Management System designed to simplify hostel operations such as room allocation, maintenance requests, billing, and resident management. The system supports multiple user roles including administrators, staff members, and residents.
 
-Currently, two official plugins are available:
+The application provides a clean dashboard interface and real-time management tools for efficient hostel administration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Frontend:
+https://stayhive-hostel.vercel.app/
 
-## Expanding the ESLint configuration
+Backend API:
+https://stay-hive.onrender.com
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Demo Credentials
+
+Use the following accounts to test different user roles in the system.
+
+### Admin
+Email: anantharjun672001@gmail.com  
+Password: Ananthraj  
+
+### Staff
+Email: rahul@gmail.com  
+Password: Rahul  
+
+### Resident
+Email: sesha@gmail.com  
+Password: Sesha  
+
+Email:kumar@gmail.com
+Password:123456
+
+---
+
+## Features
+
+### Room Allocation
+- Manage room availability
+- Assign rooms to residents
+- Track occupancy in real-time
+- Manage check-in and check-out
+
+### Maintenance Requests
+- Residents can submit maintenance issues
+- Staff can assign and update tasks
+- Track maintenance status and updates
+
+### Billing & Payments
+- Payment history tracking
+- Invoice generation
+- Razorpay payment integration
+
+### Resident Management
+- Store resident details
+- Manage contact information
+- Track room changes and stay records
+
+### Financial Reports
+- Revenue and expense tracking
+- Occupancy rate analytics
+- Visual charts using Recharts
+
+### Notifications
+- Real-time notifications for residents and staff
+- Maintenance updates
+- Billing reminders
+
+### Role-Based Access Control
+- Admin
+- Staff
+- Resident
+
+Each role has specific permissions and dashboards.
+
+---
+
+## Tech Stack
+
+Frontend
+- React
+- Vite
+- TailwindCSS
+- Flowbite
+- Axios
+- React Router
+- Recharts
+
+Backend
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
+
+Payments
+- Razorpay Integration
+
+Deployment
+- Frontend: Vercel
+- Backend: Render
+- Database: MongoDB Atlas
+
+---
+
+## Installation (Local Development)
+
+https://github.com/anantharjun672001-a11y/Hostel-Management
+
+
+## Author
+
+Ananthraj
+
+This project was built as part of a full-stack development learning program and demonstrates practical implementation of real-world hostel management operations.
+
