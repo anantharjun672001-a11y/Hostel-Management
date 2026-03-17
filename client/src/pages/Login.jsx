@@ -41,6 +41,27 @@ const Login = () => {
           Sign in to your account
         </p>
 
+        {/* 🔥 Demo Credentials Added Here */}
+        <div className="bg-gray-100 p-4 rounded-lg mb-5 text-sm text-gray-700">
+          <p className="font-semibold mb-2">Demo Credentials:</p>
+
+          <p><b>Admin</b></p>
+          <p>Email: anantharjun672001@gmail.com</p>
+          <p>Password: Ananthraj</p>
+
+          <p className="mt-2"><b>Staff</b></p>
+          <p>Email: rahul@gmail.com</p>
+          <p>Password: Rahul</p>
+
+          <p className="mt-2"><b>Resident</b></p>
+          <p>Email: sesha@gmail.com</p>
+          <p>Password: Sesha</p>
+
+          <p className="mt-2"><b>Common User</b></p>
+          <p>Email: kumar@gmail.com</p>
+          <p>Password: 123456</p>
+        </div>
+
         <form onSubmit={handleLogin} className="space-y-5">
 
           <div>
@@ -83,8 +104,6 @@ const Login = () => {
           </button>
 
         </form>
-
-
 
       </div>
 
