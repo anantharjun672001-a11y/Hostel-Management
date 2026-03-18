@@ -5,10 +5,12 @@ import { toast } from "react-toastify";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); // ✅ start loading
 
     try {
       const res = await axios.post(
@@ -25,6 +27,8 @@ const Login = () => {
       window.location.reload();
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -47,27 +51,19 @@ const Login = () => {
         <div className="bg-gray-100 p-4 rounded-lg mb-5 text-sm text-gray-700">
           <p className="font-semibold mb-2">Demo Credentials:</p>
 
-          <p>
-            <b>Admin</b>
-          </p>
+          <p><b>Admin</b></p>
           <p>Email: anantharjun672001@gmail.com</p>
           <p>Password: Ananthraj</p>
 
-          <p className="mt-2">
-            <b>Staff</b>
-          </p>
+          <p className="mt-2"><b>Staff</b></p>
           <p>Email: rahul@gmail.com</p>
           <p>Password: Rahul</p>
 
-          <p className="mt-2">
-            <b>Resident</b>
-          </p>
+          <p className="mt-2"><b>Resident</b></p>
           <p>Email: sesha@gmail.com</p>
           <p>Password: Sesha</p>
 
-          <p className="mt-2">
-            <b>Common User</b>
-          </p>
+          <p className="mt-2"><b>Common User</b></p>
           <p>Email: kumar@gmail.com</p>
           <p>Password: 123456</p>
         </div>
@@ -101,11 +97,16 @@ const Login = () => {
             />
           </div>
 
+          
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-medium py-2.5 rounded-lg"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-medium py-2.5 rounded-lg flex justify-center items-center gap-2"
           >
-            Login
+            {loading && (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            )}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
