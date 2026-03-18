@@ -39,7 +39,7 @@ const Login = () => {
           Sign in to your account
         </p>
 
-        <p>
+        <p className="text-center text-gray-100 mb-2">
           If login takes time, please wait 30–60 seconds as the backend server
           may be waking up from sleep.
         </p>
