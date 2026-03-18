@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // ✅ start loading
+    setLoading(true); 
 
     try {
       const res = await axios.post(
@@ -56,8 +56,8 @@ const Login = () => {
           <p>Password: Ananthraj</p>
 
           <p className="mt-2"><b>Staff</b></p>
-          <p>Email: rahul@gmail.com</p>
-          <p>Password: Rahul</p>
+          <p>Email: manoj@gmail.com</p>
+          <p>Password: Manoj</p>
 
           <p className="mt-2"><b>Resident</b></p>
           <p>Email: sesha@gmail.com</p>
